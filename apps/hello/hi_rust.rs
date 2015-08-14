@@ -8,18 +8,17 @@
 extern crate armstrong;
 
 
-#[inline]
-fn volatile_decrement(addr: &mut u32) -> u32 {
-    unsafe {
-        let x = core::intrinsics::volatile_load(addr as *const u32);
-        core::intrinsics::volatile_store(addr as *mut u32, x - 1);
-        return x - 1;
-    }
-}
-
-
 fn wait(duration: u32) {
     let mut i: u32 = duration;
+
+    let volatile_decrement = | addr: &mut u32 | -> u32 {
+        unsafe {
+            let value = core::intrinsics::volatile_load(addr as *const u32);
+            core::intrinsics::volatile_store(addr as *mut u32, value - 1);
+            return value - 1;
+        }
+    };
+
     loop {
         let x = volatile_decrement(&mut i);
         if x == 0 {
