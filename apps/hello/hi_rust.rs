@@ -2,11 +2,12 @@
 #![feature(no_std)]
 #![feature(const_fn)]
 
+
 #![no_std]
 #![no_main]
 
 extern crate armstrong;
-
+use armstrong::*;
 
 fn wait(duration: u32) {
     let mut i: u32 = duration;
@@ -27,9 +28,9 @@ fn wait(duration: u32) {
     }
 }
 
-const s: u32 = 0x10000;
-const m: u32 = 0x20000;
-const l: u32 = 0x30000;
+const s: u32 = 0x20000;
+const m: u32 = 0x40000;
+const l: u32 = 0x60000;
 
 //.... . .-.. .-.. ---  .-- --- .-. .-.. -..
 static MESSAGE: [&'static [u32]; 11] = [
@@ -47,23 +48,26 @@ static MESSAGE: [&'static [u32]; 11] = [
                             ];
 
 
-
 #[no_mangle]
 pub extern "C" fn main() -> () {
-
     unsafe {
-        core::intrinsics::volatile_store(0x2009C020 as *mut u32, 1 << 18);
+        FIO1DIR.write(&FIOnDIR::value().p18(IODir::output));
+
+        let led_on = FIOnSET::value().p18(Bool::on);
+        let led_off = FIOnSET::value().p18(Bool::off);
+
         loop {
             for &morse_char in MESSAGE.iter() {
                 for &delay in morse_char.iter() {
-                    core::intrinsics::volatile_store(0x2009C034 as *mut u32, 1 << 18);
+                    FIO1SET.write(&led_on);
                     wait(delay);
-                    core::intrinsics::volatile_store(0x2009C034 as *mut u32, 0 << 18);
+                    FIO1SET.write(&led_off);
                     wait(s);
                 }
                 wait(2 * s);
             }
         }
-    }
 
+
+    }
 }
