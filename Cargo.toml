@@ -1,0 +1,22 @@
+[package]
+name = "armstrong"
+version = "0.0.1"
+authors = ["mikael@silven.nu"]
+
+
+[lib]
+name = "armstrong"
+crate-type = ["lib"]
+
+
+[profile.release]
+lto = false
+
+
+[features]
+kernel_mode = ["core"]
+
+
+[target.thumbv7m-none-eabi.dependencies.core]
+git = "https://github.com/hackndev/rust-libcore"
+optional = true

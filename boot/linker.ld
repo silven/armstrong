@@ -1,21 +1,23 @@
-ENTRY(_isr_vector)
-
 MEMORY {
 	FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 0x8000
 	RAM (wail) : ORIGIN = 0x10000000, LENGTH = 0x2000
 }
 
 _stack_start = ORIGIN(RAM) + LENGTH(RAM);
-_boot_checksum = 0 - (_stack_start + main + 1 + (hang + 1) * 5);
+_boot_checksum = 0 - (_stack_start + reset_handler + 1 + (hang + 1) * 5);
+
+ENTRY(reset_handler)
+
+__aeabi_unwind_cpp_pr0 = hang;
 
 SECTIONS {
- .text : {
-    KEEP(*(_isr_vector));
- 	* (.text*)
- } > FLASH
+  .text : {
+    KEEP(*(.isr_vector))
 
- .bss : {
+ 	*(.text*)
+  } > FLASH
+
+  .bss : {
  	* (.bss*)
- } > RAM
-
+  } > RAM
 }

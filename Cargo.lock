@@ -1,0 +1,12 @@
+[root]
+name = "armstrong"
+version = "0.0.1"
+dependencies = [
+ "core 1.0.0 (git+https://github.com/hackndev/rust-libcore)",
+]
+
+[[package]]
+name = "core"
+version = "1.0.0"
+source = "git+https://github.com/hackndev/rust-libcore#d9dc4f94163a78efb4da176db6bd4ba82b2ac93e"
+
