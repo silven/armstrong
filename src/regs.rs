@@ -16,27 +16,27 @@ pub mod raw_implementation  {
         in memory which it writes to and reads from.
     */
     pub struct BasicRegister {
-        address: *mut u32
+        address: u32
     }
 
     #[allow(missing_docs)]
     impl BasicRegister {
         #[inline(always)]
-        pub fn new(memory_address: u32) -> Self {
-            BasicRegister{ address: memory_address as *mut u32}
+        pub const fn new(memory_address: u32) -> Self {
+            BasicRegister{ address: memory_address }
         }
 
         #[inline(always)]
         pub fn write(&mut self, new_value: u32) {
             unsafe {
-                ::core::intrinsics::volatile_store(self.address, new_value);
+                ::core::intrinsics::volatile_store(self.address as *mut u32, new_value);
             }
         }
 
         #[inline(always)]
         pub fn read(&self) -> u32 {
             unsafe {
-                return ::core::intrinsics::volatile_load(self.address);
+                return ::core::intrinsics::volatile_load(self.address as *const u32);
             }
         }
     }
