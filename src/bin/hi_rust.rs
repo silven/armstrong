@@ -113,7 +113,7 @@ fn setup() {
 
 #[no_mangle]
 pub extern fn start() -> ! {
-    //setup();
+    setup();
 
     let mut fiodir = armstrong::BasicRegister::new(0x2009C020);
     let mut fioset = armstrong::BasicRegister::new(0x2009C034);
