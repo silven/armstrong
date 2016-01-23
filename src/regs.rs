@@ -9,35 +9,48 @@
 extern crate core;
 
 
+
 #[allow(dead_code)]
 pub mod raw_implementation  {
+    use ::core::ops::{BitAnd, BitOr};
+
     /**
         Embedded Implementation, points at an address
         in memory which it writes to and reads from.
     */
-    pub struct BasicRegister {
-        address: u32
+    pub struct BasicRegister<T> {
+        address: *mut T
     }
 
     #[allow(missing_docs)]
-    impl BasicRegister {
+    impl<T: BitAnd<Output=T> + BitOr<Output=T>> BasicRegister<T> {
         #[inline(always)]
-        pub const fn new(memory_address: u32) -> Self {
-            BasicRegister{ address: memory_address }
+        pub const fn new(memory_address: usize) -> Self {
+            BasicRegister{ address: memory_address as *mut T}
         }
 
         #[inline(always)]
-        pub fn write(&mut self, new_value: u32) {
+        pub fn write(&mut self, new_value: T) {
             unsafe {
-                ::core::intrinsics::volatile_store(self.address as *mut u32, new_value);
+                ::core::intrinsics::volatile_store(self.address as *mut T, new_value);
             }
         }
 
         #[inline(always)]
-        pub fn read(&self) -> u32 {
+        pub fn read(&self) -> T {
             unsafe {
-                return ::core::intrinsics::volatile_load(self.address as *const u32);
+                return ::core::intrinsics::volatile_load(self.address as *const T);
             }
+        }
+
+        pub fn and(&mut self, value: T) {
+            let current = self.read();
+            self.write(current & value);
+        }
+
+        pub fn or(&mut self, value: T) {
+            let current = self.read();
+            self.write(current | value);
         }
     }
 }

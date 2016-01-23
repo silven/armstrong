@@ -9,6 +9,7 @@ _boot_checksum = 0 - (_stack_start + reset_handler + 1 + (hang + 1) * 5);
 ENTRY(reset_handler)
 
 __aeabi_unwind_cpp_pr0 = hang;
+__aeabi_memclr4 = __aeabi_memclr;
 
 SECTIONS {
   .text : {

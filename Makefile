@@ -1,6 +1,6 @@
 BUILD_DIR   := target/thumbv7m-none-eabi/release
 MBED_DIR    := /Volumes/MBED
-MBED_TTY    := /dev/tty.usbmodem1422
+MBED_TTY    := /dev/tty.usbmodem1412
 
 app         ?= hi_rust
 
