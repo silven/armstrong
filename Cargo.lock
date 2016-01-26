@@ -2,11 +2,11 @@
 name = "armstrong"
 version = "0.0.1"
 dependencies = [
- "core 1.0.0 (git+https://github.com/hackndev/rust-libcore)",
+ "rust-libcore 0.0.3 (git+https://github.com/hackndev/rust-libcore)",
 ]
 
 [[package]]
-name = "core"
-version = "1.0.0"
-source = "git+https://github.com/hackndev/rust-libcore#d9dc4f94163a78efb4da176db6bd4ba82b2ac93e"
+name = "rust-libcore"
+version = "0.0.3"
+source = "git+https://github.com/hackndev/rust-libcore#44866049b658b7fa4a4c4d3ff525c6abf057918f"
 
