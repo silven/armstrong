@@ -2,11 +2,11 @@
 name = "armstrong"
 version = "0.0.1"
 dependencies = [
- "rust-libcore 0.0.3 (git+https://github.com/hackndev/rust-libcore)",
+ "rust-libcore 0.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "rust-libcore"
 version = "0.0.3"
-source = "git+https://github.com/hackndev/rust-libcore#44866049b658b7fa4a4c4d3ff525c6abf057918f"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 
