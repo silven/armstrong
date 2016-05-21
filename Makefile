@@ -2,11 +2,9 @@ BUILD_DIR   := target/thumbv7m-none-eabi/release
 MBED_DIR    := /Volumes/MBED
 MBED_TTY    := /dev/tty.usbmodem1412
 
-app         ?= hi_rust
+CARGO_FLAGS := --verbose --features kernel_mode --release --target thumbv7m-none-eabi
 
-# Flags
-RUSTCFLAGS  := -C soft-float -C code-model=kernel -Z no-landing-pads
-LDFLAGS     := --gc-sections
+app         ?= hi_rust
 
 LINK_SCRIPT := $(BOOT_DIR)/linker.ld
 
@@ -24,11 +22,11 @@ flash: $(BUILD_DIR)/$(app).bin
 
 # Compile the wanted app
 $(BUILD_DIR)/$(app): armstrong
-	cargo build --verbose --features kernel_mode --bin $(app) --release --target thumbv7m-none-eabi
+	cargo build $(CARGO_FLAGS) --bin $(app)
 
 # Compile the armstrong kernel
 armstrong: 
-	cargo build --verbose --features kernel_mode --lib --release --target thumbv7m-none-eabi
+	cargo build $(CARGO_FLAGS) --lib
 
 # Objdump into a binary
 $(BUILD_DIR)/$(app).bin: $(BUILD_DIR)/$(app)
