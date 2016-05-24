@@ -3,19 +3,16 @@ name = "armstrong"
 version = "0.0.1"
 authors = ["mikael@silven.nu"]
 
-
 [lib]
 name = "armstrong"
 crate-type = ["lib"]
 
-
 [profile.release]
-lto = false
-
+lto = true
+panic = 'abort'
 
 [features]
 kernel_mode = []
-
 
 [target.thumbv7m-none-eabi.dependencies]
 rust-libcore = "0.0.3"
