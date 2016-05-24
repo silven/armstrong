@@ -1,11 +1,10 @@
-/*!
-    Module with ISR boot vectors
-*/
+//! Module with ISR boot vectors
+//!
 
-extern {
-  fn start();
-  fn _stack_start();
-  fn _boot_checksum();
+extern "C" {
+    fn start();
+    fn _stack_start();
+    fn _boot_checksum();
 }
 
 
@@ -14,7 +13,7 @@ extern {
 /**
   Hang function, loops for ever
 */
-pub unsafe extern fn hang() {
+pub unsafe extern "C" fn hang() {
     loop {}
 }
 
@@ -24,7 +23,7 @@ pub unsafe extern fn hang() {
   setup data sections in ROM, but currently only
   calls the user defined start() function.
 */
-pub unsafe extern fn reset_handler() {
+pub unsafe extern "C" fn reset_handler() {
     start()
 }
 

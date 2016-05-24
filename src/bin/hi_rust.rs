@@ -15,7 +15,7 @@ macro_rules! wait_for {
 
 #[derive(Copy, Clone)]
 struct Volatile<T> {
-    value: T
+    value: T,
 }
 
 impl<T> Volatile<T> {
@@ -25,15 +25,13 @@ impl<T> Volatile<T> {
 
     #[inline]
     pub fn get(&self) -> T {
-        unsafe {
-	    core::intrinsics::volatile_load(&self.value)
-        }
+        unsafe { core::intrinsics::volatile_load(&self.value) }
     }
 
     #[inline]
     pub fn set(&mut self, new: T) {
         unsafe {
-	    core::intrinsics::volatile_store(&mut self.value, new);
+            core::intrinsics::volatile_store(&mut self.value, new);
         }
     }
 }
@@ -43,29 +41,27 @@ fn wait(duration: u32) {
     loop {
         let x = i.get() - 1;
         if x == 0 {
-           break;
+            break;
         }
-	i.set(x);
+        i.set(x);
     }
 }
 
 const SHORT: u32 = 0x200000;
 const LONG: u32 = 0x600000;
 
-//.... . .-.. .-.. ---  .-- --- .-. .-.. -..
-static MESSAGE: [&'static [u32]; 11] = [
-                            &[SHORT, SHORT, SHORT, SHORT],
-                            &[SHORT],
-                            &[SHORT, LONG, SHORT, SHORT],
-                            &[SHORT, LONG, SHORT, SHORT],
-                            &[LONG, LONG, LONG],
-                            &[],
-                            &[SHORT, LONG, LONG],
-                            &[LONG, LONG, LONG],
-                            &[SHORT, LONG, SHORT],
-                            &[SHORT, LONG, SHORT, SHORT],
-                            &[LONG, SHORT, SHORT]
-                           ];
+// .... . .-.. .-.. ---  .-- --- .-. .-.. -..
+static MESSAGE: [&'static [u32]; 11] = [&[SHORT, SHORT, SHORT, SHORT],
+                                        &[SHORT],
+                                        &[SHORT, LONG, SHORT, SHORT],
+                                        &[SHORT, LONG, SHORT, SHORT],
+                                        &[LONG, LONG, LONG],
+                                        &[],
+                                        &[SHORT, LONG, LONG],
+                                        &[LONG, LONG, LONG],
+                                        &[SHORT, LONG, SHORT],
+                                        &[SHORT, LONG, SHORT, SHORT],
+                                        &[LONG, SHORT, SHORT]];
 
 
 unsafe fn pll0_feed() {
@@ -180,7 +176,7 @@ fn uart0_getc() -> u8 {
 }
 
 #[no_mangle]
-pub extern fn start() -> ! {
+pub extern "C" fn start() -> ! {
     setup();
     uart0_init();
 
