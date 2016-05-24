@@ -1,6 +1,6 @@
 BUILD_DIR   := target/thumbv7m-none-eabi/release
-MBED_DIR    := /Volumes/MBED
-MBED_TTY    := /dev/tty.usbmodem1412
+MBED_DIR    := /media/mikael/MBED
+MBED_TTY    := /dev/ttyACM0
 
 CARGO_FLAGS := --verbose --features kernel_mode --release --target thumbv7m-none-eabi
 
