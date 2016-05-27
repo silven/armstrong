@@ -1,5 +1,4 @@
-#![feature(core_slice_ext, core_str_ext, core_intrinsics)]
-#![feature(no_std)]
+#![feature(core_intrinsics)]
 #![feature(const_fn)]
 
 #![no_std]

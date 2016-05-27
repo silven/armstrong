@@ -12,10 +12,12 @@
     "target-pointer-width": "32",
     "no-compiler-rt": true,
     "pre-link-args": [
+        "-Tboot/linker.ld",
         "-mcpu=cortex-m3",
 		"-mthumb",
-        "-Tboot/linker.ld"
+        "-Wl,--gc-sections"
     ],
     "post-link-args": [
+        "-lgcc"
     ]
 }

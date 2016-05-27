@@ -1,17 +1,14 @@
-/*!
-    Module for most basic register handling
-
-    Contains implementation for both "PC" version, used for testing,
-    and the embedded version used for cross compiled apps, writing
-    to addresses in memory.
-*/
+//! Module for most basic register handling
+//!
+//! Contains implementation for both "PC" version, used for testing,
+//! and the embedded version used for cross compiled apps, writing
+//! to addresses in memory.
+//!
 
 extern crate core;
 
-
-
 #[allow(dead_code)]
-pub mod raw_implementation  {
+pub mod raw_implementation {
     use ::core::ops::{BitAnd, BitOr};
 
     /**
@@ -19,14 +16,14 @@ pub mod raw_implementation  {
         in memory which it writes to and reads from.
     */
     pub struct BasicRegister<T> {
-        address: *mut T
+        address: *mut T,
     }
 
     #[allow(missing_docs)]
-    impl<T: BitAnd<Output=T> + BitOr<Output=T>> BasicRegister<T> {
+    impl<T: BitAnd<Output = T> + BitOr<Output = T>> BasicRegister<T> {
         #[inline(always)]
         pub const fn new(memory_address: usize) -> Self {
-            BasicRegister{ address: memory_address as *mut T}
+            BasicRegister { address: memory_address as *mut T }
         }
 
         #[inline(always)]
@@ -56,20 +53,20 @@ pub mod raw_implementation  {
 }
 
 #[allow(dead_code)]
-pub mod pc_implementation  {
+pub mod pc_implementation {
     /**
         PC Implementation, defaults to zero value.
         Reads and writes to/from local variable.
     */
     pub struct BasicRegister {
-        value: u32
+        value: u32,
     }
 
     #[allow(missing_docs)]
     impl BasicRegister {
         #[inline(always)]
         pub fn new(_: u32) -> Self {
-            BasicRegister{ value: 0 }
+            BasicRegister { value: 0 }
         }
 
         #[inline(always)]

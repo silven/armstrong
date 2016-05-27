@@ -1,10 +1,8 @@
-/*!
+//! Armstrong Kernel WIP
+//!
+//!
 
-	Armstrong Kernel WIP
-
-*/
-
-#![feature(core, core_intrinsics, no_std, lang_items, const_fn)]
+#![feature(core_intrinsics, lang_items, const_fn)]
 
 #![warn(missing_docs)]
 #![deny(unused_extern_crates)]
@@ -88,4 +86,3 @@ pub mod m3 {
     pub static mut U0DLM_REGISTER: ::BasicRegister<u8> = ::BasicRegister::new(0x4000C004);
 
 }
-

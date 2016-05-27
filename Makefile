@@ -8,8 +8,8 @@ app         ?= hi_rust
 
 LINK_SCRIPT := $(BOOT_DIR)/linker.ld
 
-all: $(BUILD_DIR)/$(app).bin $(BUILD_DIR)/$(app).lst
-	@wc -c $<
+all: $(BUILD_DIR)/$(app) $(BUILD_DIR)/$(app).bin $(BUILD_DIR)/$(app).lst
+	arm-none-eabi-size $<
 da: $(BUILD_DIR)/$(app).lst
 	cat $<
 clean:
@@ -25,7 +25,7 @@ $(BUILD_DIR)/$(app): armstrong
 	cargo build $(CARGO_FLAGS) --bin $(app)
 
 # Compile the armstrong kernel
-armstrong: 
+armstrong:
 	cargo build $(CARGO_FLAGS) --lib
 
 # Objdump into a binary

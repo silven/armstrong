@@ -1,6 +1,5 @@
-/*!
-    Lang items, required by the compiler
-*/
+//! Lang items, required by the compiler
+//!
 extern crate core;
 
 #[lang="eh_personality"]
