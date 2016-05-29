@@ -3,30 +3,26 @@
 //!
 
 #![feature(core_intrinsics, lang_items, const_fn)]
+#![feature(drop_types_in_const)]
 
 #![warn(missing_docs)]
 #![deny(unused_extern_crates)]
 #![warn(unused_qualifications)]
 
-#![deny(box_pointers)]
 #![deny(unused_results)]
 
 #![deny(overflowing_literals)]
+#![cfg_attr(target_os="none", no_std)]
 
-#![no_std]
+#[cfg(not(target_os="none"))]
+extern crate core;
 
-#[allow(unused_extern_crates)]
-#[cfg(not(feature = "kernel_mode"))]
-extern crate std;
-
-
-#[cfg(feature = "kernel_mode")]
+#[cfg(target_os="none")]
 mod lang_items;
 
-#[cfg(feature = "kernel_mode")]
+#[cfg(target_os="none")]
 pub mod libc;
 
-#[cfg(feature = "kernel_mode")]
 pub mod isr;
 
 mod regs;
@@ -39,9 +35,6 @@ mod test {
     fn registers_work() {
         let mut reg = ::BasicRegister::new(0x00);
 
-        let current_value = reg.read();
-        assert_eq!(0x00, current_value);
-
         let new_value = 0xFF;
         reg.write(new_value);
 
@@ -50,7 +43,6 @@ mod test {
     }
 }
 
-#[cfg(feature = "kernel_mode")]
 #[allow(dead_code)]
 #[allow(missing_docs)]
 pub mod m3 {
@@ -70,7 +62,6 @@ pub mod m3 {
     pub static mut PLL0CON_REGISTER: ::BasicRegister<u32> = ::BasicRegister::new(0x400FC080);
 
     pub static mut PLL0STAT_REGISTER: ::BasicRegister<u32> = ::BasicRegister::new(0x400FC088);
-
 
     pub static mut U0LCR_REGISTER: ::BasicRegister<u32> = ::BasicRegister::new(0x4000C00C);
     pub static mut U0FCR_REGISTER: ::BasicRegister<u32> = ::BasicRegister::new(0x4000C008);

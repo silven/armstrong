@@ -2,11 +2,11 @@ BUILD_DIR   := target/thumbv7m-none-eabi/release
 MBED_DIR    := /media/mikael/MBED
 MBED_TTY    := /dev/ttyACM0
 
-CARGO_FLAGS := --verbose --features kernel_mode --release --target thumbv7m-none-eabi
-
-app         ?= hi_rust
+CARGO_FLAGS := --verbose --release --target thumbv7m-none-eabi
 
 LINK_SCRIPT := $(BOOT_DIR)/linker.ld
+
+app         ?= hi_rust
 
 all: $(BUILD_DIR)/$(app) $(BUILD_DIR)/$(app).bin $(BUILD_DIR)/$(app).lst
 	arm-none-eabi-size $<

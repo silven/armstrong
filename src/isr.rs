@@ -45,20 +45,41 @@ fn init_memory() {
 
     use ::core::intrinsics::{volatile_copy_nonoverlapping_memory, volatile_set_memory};
     unsafe {
-        let data_bytes_delta = (&__data_end as *const u32 as usize) -
-                               (&__data_start as *const u32 as usize);
-        let data_section_size = data_bytes_delta / ::core::mem::size_of::<u32>();
+
+        let data_section_size = distance_between(&__data_start, &__data_end);
         volatile_copy_nonoverlapping_memory(&mut __data_start as *mut u32,
                                             &__data_load as *const u32,
                                             data_section_size);
 
-        let bss_bytes_delta = (&__bss_end as *const u32 as usize) -
-                              (&__bss_start as *const u32 as usize);
-        let bss_section_size = bss_bytes_delta / ::core::mem::size_of::<u32>();
+        let bss_section_size = distance_between(&__bss_start, &__bss_end);
         volatile_set_memory(&mut __bss_start as *mut u32, 0x00, bss_section_size);
     }
 }
 
+fn distance_between<T>(a: *const T, b: *const T) -> usize {
+    let ptr_diff = if a > b {
+        a as usize - b as usize
+    } else {
+        b as usize - a as usize
+    };
+    return ptr_diff / ::core::mem::size_of::<T>();
+}
+
+mod test {
+    #[test]
+    fn distance_between_adjusts_for_number_of_bytes() {
+        let expected_diff = 0x100; // 0x400 / 4
+        let distance = super::distance_between(0x400 as *const u32, 0x800 as *const u32);
+        assert_eq!(distance, expected_diff);
+    }
+
+    #[test]
+    fn distance_between_calculates_positive_distance() {
+        let expected_diff = 0x400;
+        let distance = super::distance_between(0x800 as *const u8, 0x400 as *const u8);
+        assert_eq!(distance, expected_diff);
+    }
+}
 
 /**
   ISR Handler function table.

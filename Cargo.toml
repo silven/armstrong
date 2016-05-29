@@ -11,8 +11,5 @@ crate-type = ["lib"]
 lto = true
 panic = 'abort'
 
-[features]
-kernel_mode = []
-
 [target.thumbv7m-none-eabi.dependencies]
 rust-libcore = "0.0.3"
