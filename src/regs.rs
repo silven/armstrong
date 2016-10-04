@@ -27,14 +27,14 @@ pub mod raw_implementation {
         #[inline(always)]
         pub fn write(&mut self, new_value: T) {
             unsafe {
-                ::core::intrinsics::volatile_store(self.address as *mut T, new_value);
+                ::core::ptr::write_volatile(self.address as *mut T, new_value);
             }
         }
 
         #[inline(always)]
         pub fn read(&self) -> T {
             unsafe {
-                return ::core::intrinsics::volatile_load(self.address as *const T);
+                return ::core::ptr::read_volatile(self.address as *const T);
             }
         }
 

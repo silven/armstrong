@@ -1,38 +1,15 @@
-#![feature(core_intrinsics)]
 #![feature(const_fn)]
 
 #![no_std]
 #![no_main]
 
 extern crate armstrong;
+use armstrong::Volatile;
 
 macro_rules! wait_for {
     ($cond:expr) => {
         while ! $cond {};
     };
-}
-
-#[derive(Copy, Clone)]
-struct Volatile<T> {
-    value: T,
-}
-
-impl<T> Volatile<T> {
-    pub fn new(initial: T) -> Volatile<T> {
-        Volatile { value: initial }
-    }
-
-    #[inline]
-    pub fn get(&self) -> T {
-        unsafe { core::intrinsics::volatile_load(&self.value) }
-    }
-
-    #[inline]
-    pub fn set(&mut self, new: T) {
-        unsafe {
-            core::intrinsics::volatile_store(&mut self.value, new);
-        }
-    }
 }
 
 fn wait(duration: u32) {
@@ -121,8 +98,8 @@ fn uart0_init() {
 
         U0FDR_REGISTER.write(0x21);
 
-        U0DLL_REGISTER.write(0x6C); //(div / 256) as u8);
-        U0DLM_REGISTER.write(0); //(div % 256) as u8);
+        U0DLM_REGISTER.write(0); //(div / 256) as u8);
+        U0DLL_REGISTER.write(0x6C); //(div % 256) as u8);
 
         U0LCR_REGISTER.write(0x03);
         U0FCR_REGISTER.write(0x07);

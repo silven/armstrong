@@ -2,7 +2,7 @@
 //!
 //!
 
-#![feature(core_intrinsics, lang_items, const_fn)]
+#![feature(lang_items, const_fn)]
 #![feature(drop_types_in_const)]
 
 #![warn(missing_docs)]
@@ -25,8 +25,10 @@ pub mod libc;
 
 pub mod isr;
 
-mod regs;
+pub mod utils;
+pub use utils::Volatile;
 
+mod regs;
 pub use regs::BasicRegister;
 
 #[cfg(test)]

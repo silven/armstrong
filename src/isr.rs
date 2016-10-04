@@ -43,16 +43,15 @@ fn init_memory() {
         static __bss_end: u32;
     }
 
-    use ::core::intrinsics::{volatile_copy_nonoverlapping_memory, volatile_set_memory};
     unsafe {
 
         let data_section_size = distance_between(&__data_start, &__data_end);
-        volatile_copy_nonoverlapping_memory(&mut __data_start as *mut u32,
-                                            &__data_load as *const u32,
-                                            data_section_size);
+        ::core::ptr::copy_nonoverlapping(&__data_load as *const u32,
+                                         &mut __data_start as *mut u32,
+                                         data_section_size);
 
         let bss_section_size = distance_between(&__bss_start, &__bss_end);
-        volatile_set_memory(&mut __bss_start as *mut u32, 0x00, bss_section_size);
+        ::core::ptr::write_bytes(&mut __bss_start as *mut u32, 0x00, bss_section_size);
     }
 }
 

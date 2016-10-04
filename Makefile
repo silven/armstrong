@@ -18,7 +18,6 @@ test:
 	cargo test --verbose
 flash: $(BUILD_DIR)/$(app).bin
 	cp $(BUILD_DIR)/$(app).bin $(MBED_DIR)/$(app).bin
-	python -c "import termios; import os; termios.tcsendbreak(os.open('$(MBED_TTY)', os.O_WRONLY | os.O_NONBLOCK), 0)"
 
 # Compile the wanted app
 $(BUILD_DIR)/$(app): armstrong
