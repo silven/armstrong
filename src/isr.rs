@@ -7,15 +7,44 @@ extern "C" {
     fn __boot_checksum();
 }
 
+struct crash_uart {
+    addr: *mut u8,
+}
+
+impl ::core::fmt::Write for crash_uart {
+    fn write_str(&mut self, s: &str) -> Result<(), ::core::fmt::Error> {
+        use ::m3::*;
+        for b in s.bytes() {
+            unsafe {
+                loop {
+                    if (U0LSR_REGISTER.read() & 0x20 != 0) {
+                        break;
+                    }
+                }
+                UART0.write(b);
+            }
+        }
+        return Ok(());
+    }
+}
+
+#[lang="panic_fmt"]
+pub extern fn handle_panic(_msg: ::core::fmt::Arguments,
+                               _file: &'static str,
+                               _line: u32) {
+    use ::core::fmt::Write;
+    let mut u0 = crash_uart { addr: 0x4000C000 as *mut u8 };
+    write!(&mut u0, "[Armstrong] Detected panic at: {}:{}: {}\n\r", _file, _line, _msg);
+    loop {};
+}
 
 #[no_mangle]
 /**
   abort function, loops for ever
 */
 pub unsafe extern "C" fn abort() {
-    loop {}
+    panic!("Abort called");
 }
-
 
 #[naked]
 #[no_mangle]

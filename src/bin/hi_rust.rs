@@ -165,7 +165,7 @@ impl ::core::fmt::Write for UART {
 
 #[naked]
 #[no_mangle]
-pub extern "C" fn start() -> ! {
+pub extern "C" fn start() {
     setup();
     uart0_init();
 
@@ -191,7 +191,10 @@ pub extern "C" fn start() -> ! {
 
             match as_utf8 {
                 "on" => fioset |= (1 << 18),
-                "off" => fioset ^= (1 << 18),
+                "c" => { write!(&mut u0, "crash at: {}", 0 / 0); },
+                "off" => fioset &= !(1 << 18),
+                "t" => fioset ^= (1 << 18),
+                "halt" => return,
                 _ => {},
             }
 
