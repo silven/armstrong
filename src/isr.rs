@@ -17,6 +17,7 @@ pub unsafe extern "C" fn hang() {
 }
 
 
+#[naked]
 #[no_mangle]
 /**
   The reset handler function, sets
@@ -26,6 +27,7 @@ pub unsafe extern "C" fn hang() {
 pub unsafe extern "C" fn reset_handler() {
     init_memory();
     start();
+    hang();
 }
 
 /**

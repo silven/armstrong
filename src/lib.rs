@@ -2,7 +2,7 @@
 //!
 //!
 
-#![feature(lang_items, const_fn)]
+#![feature(lang_items, const_fn, naked_functions)]
 #![feature(drop_types_in_const)]
 
 #![warn(missing_docs)]
@@ -31,19 +31,14 @@ pub use utils::Volatile;
 mod regs;
 pub use regs::BasicRegister;
 
-#[cfg(test)]
-mod test {
-    #[test]
-    fn registers_work() {
-        let mut reg = ::BasicRegister::new(0x00);
-
-        let new_value = 0xFF;
-        reg.write(new_value);
-
-        let current_value = reg.read();
-        assert_eq!(new_value, current_value)
-    }
+#[macro_export]
+macro_rules! wait_for {
+    ($cond:expr) => {
+        while ! $cond {};
+    };
 }
+
+
 
 #[allow(dead_code)]
 #[allow(missing_docs)]

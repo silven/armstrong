@@ -1,16 +1,11 @@
-#![feature(const_fn)]
+#![feature(const_fn, naked_functions)]
 
 #![no_std]
 #![no_main]
 
+#[macro_use]
 extern crate armstrong;
 use armstrong::Volatile;
-
-macro_rules! wait_for {
-    ($cond:expr) => {
-        while ! $cond {};
-    };
-}
 
 fn wait(duration: u32) {
     let mut i = Volatile::<u32>::new(duration);
@@ -151,6 +146,7 @@ fn uart0_getc() -> u8 {
     }
 }
 
+#[naked]
 #[no_mangle]
 pub extern "C" fn start() -> ! {
     setup();
@@ -159,7 +155,7 @@ pub extern "C" fn start() -> ! {
     let mut fiodir = armstrong::BasicRegister::new(0x2009C020);
     let mut fioset = armstrong::BasicRegister::new(0x2009C034);
     fiodir.write(1 << 18);
-
+    /*
     uart0_write(b"Hello world!\n\r");
     let mut input_buffer = [0; 32];
     loop {
@@ -169,6 +165,7 @@ pub extern "C" fn start() -> ! {
         uart0_write(&input_buffer[..bytes]);
         uart0_write(b"\n\r");
     }
+    */
 
     loop {
         for &morse_char in MESSAGE.iter() {
