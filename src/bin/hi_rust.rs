@@ -34,7 +34,7 @@ static MESSAGE: [&'static [u32]; 11] = [&[SHORT, SHORT, SHORT, SHORT],
                                         &[SHORT, LONG, SHORT, SHORT],
                                         &[LONG, SHORT, SHORT]];
 
-
+#[inline(never)]
 unsafe fn pll0_feed() {
     use armstrong::m3::*;
 
@@ -81,13 +81,13 @@ fn setup() {
     }
 }
 
-
+#[inline(never)]
 fn uart0_init() {
     use armstrong::m3::*;
 
     unsafe {
-        PINSEL0_REGISTER.and(!0xF0);
-        PINSEL0_REGISTER.or(0b01 << 4 | 0b01 << 6);
+        PINSEL0_REGISTER &= (!0xF0);
+        PINSEL0_REGISTER |= (0b01 << 4 | 0b01 << 6);
 
         U0LCR_REGISTER.write(0x83);
 
@@ -112,12 +112,14 @@ fn uart0_init() {
     }
 }
 
+#[inline(never)]
 fn uart0_write(msg: &[u8]) {
     for &b in msg {
         uart0_putc(b);
     }
 }
 
+#[inline(never)]
 fn uart0_putc(byte: u8) {
     use armstrong::m3::*;
     unsafe {
@@ -126,6 +128,7 @@ fn uart0_putc(byte: u8) {
     }
 }
 
+#[inline(never)]
 fn uart0_read(buffer: &mut [u8]) -> usize {
     for i in 0..buffer.len() {
         let c = uart0_getc();
@@ -138,11 +141,25 @@ fn uart0_read(buffer: &mut [u8]) -> usize {
     return buffer.len();
 }
 
+#[inline(never)]
 fn uart0_getc() -> u8 {
     use armstrong::m3::*;
     unsafe {
         wait_for!(U0LSR_REGISTER.read() & 0x01 != 0);
         return UART0.read();
+    }
+}
+
+struct UART {
+    addr: *mut u8,
+}
+
+impl ::core::fmt::Write for UART {
+    fn write_str(&mut self, s: &str) -> Result<(), ::core::fmt::Error> {
+        for b in s.bytes() {
+            uart0_putc(b);
+        }
+        return Ok(());
     }
 }
 
@@ -155,24 +172,42 @@ pub extern "C" fn start() -> ! {
     let mut fiodir = armstrong::BasicRegister::new(0x2009C020);
     let mut fioset = armstrong::BasicRegister::new(0x2009C034);
     fiodir.write(1 << 18);
-    /*
+
+    use core::fmt::Write;
+    let mut u0 = UART{addr: 0x00 as *mut u8};
+    //loop {
+        write!(&mut u0, "Hello {}\n\r\r", 1337);
+    //}
+
     uart0_write(b"Hello world!\n\r");
     let mut input_buffer = [0; 32];
     loop {
         uart0_write(b"Write something?\n\r");
         let bytes = uart0_read(&mut input_buffer);
-        uart0_write(b"You wrote: ");
-        uart0_write(&input_buffer[..bytes]);
+        //uart0_write(b"You wrote: ");
+
+        if let Ok(as_utf8) = ::core::str::from_utf8(&input_buffer[..bytes]) {
+            write!(&mut u0, "You wrote {}\n\r", as_utf8);
+
+            match as_utf8 {
+                "on" => fioset |= (1 << 18),
+                "off" => fioset ^= (1 << 18),
+                _ => {},
+            }
+
+        } else {
+            write!(&mut u0, "..I didn't understand that");
+        }
+        //uart0_write(&input_buffer[..bytes]);
         uart0_write(b"\n\r");
     }
-    */
 
     loop {
         for &morse_char in MESSAGE.iter() {
             for &delay in morse_char.iter() {
-                fioset.write(1 << 18);
+                fioset |= (1 << 18);
                 wait(delay);
-                fioset.write(0);
+                fioset &= (0);
                 wait(SHORT);
             }
             wait(2 * SHORT);

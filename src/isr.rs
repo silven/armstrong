@@ -10,9 +10,9 @@ extern "C" {
 
 #[no_mangle]
 /**
-  Hang function, loops for ever
+  abort function, loops for ever
 */
-pub unsafe extern "C" fn hang() {
+pub unsafe extern "C" fn abort() {
     loop {}
 }
 
@@ -27,7 +27,7 @@ pub unsafe extern "C" fn hang() {
 pub unsafe extern "C" fn reset_handler() {
     init_memory();
     start();
-    hang();
+    abort();
 }
 
 /**
@@ -46,7 +46,6 @@ fn init_memory() {
     }
 
     unsafe {
-
         let data_section_size = distance_between(&__data_start, &__data_end);
         ::core::ptr::copy_nonoverlapping(&__data_load as *const u32,
                                          &mut __data_start as *mut u32,
@@ -91,18 +90,18 @@ mod test {
 pub static ISRVectors: [Option<unsafe extern fn()>; 16] = [
   Some(__stack_start),       // start of the stack
   Some(reset_handler),      // reset handler
-  Some(hang),               // NMI handler
-  Some(hang),               // hard fault handler
-  Some(hang),               // MPU fault handler
-  Some(hang),               // bus fault handler
-  Some(hang),               // usage fault handler
+  Some(abort),               // NMI handler
+  Some(abort),               // hard fault handler
+  Some(abort),               // MPU fault handler
+  Some(abort),               // bus fault handler
+  Some(abort),               // usage fault handler
   Some(__boot_checksum),     // reserved for boot checksum
   None,                     // reserved
   None,                     // reserved
   None,                     // reserved
-  Some(hang),               // SV call handler
-  Some(hang),               // debug monitor handler
+  Some(abort),               // SV call handler
+  Some(abort),               // debug monitor handler
   None,                     // reserved
-  Some(hang),               // PendSV handler
-  Some(hang),               // SysTick handler
+  Some(abort),               // PendSV handler
+  Some(abort),               // SysTick handler
 ];

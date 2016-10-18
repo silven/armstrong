@@ -38,8 +38,6 @@ macro_rules! wait_for {
     };
 }
 
-
-
 #[allow(dead_code)]
 #[allow(missing_docs)]
 pub mod m3 {
