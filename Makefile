@@ -13,7 +13,7 @@ all: $(BUILD_DIR)/$(app) $(BUILD_DIR)/$(app).bin $(BUILD_DIR)/$(app).lst
 da: $(BUILD_DIR)/$(app).lst
 	cat $<
 clean:
-	cargo clean
+	xargo clean
 test:
 	cargo test --verbose
 flash: $(BUILD_DIR)/$(app).bin
@@ -21,11 +21,11 @@ flash: $(BUILD_DIR)/$(app).bin
 
 # Compile the wanted app
 $(BUILD_DIR)/$(app): armstrong
-	cargo build $(CARGO_FLAGS) --bin $(app)
+	xargo build $(CARGO_FLAGS) --bin $(app)
 
 # Compile the armstrong kernel
 armstrong:
-	cargo build $(CARGO_FLAGS) --lib
+	xargo build $(CARGO_FLAGS) --lib
 
 # Objdump into a binary
 $(BUILD_DIR)/$(app).bin: $(BUILD_DIR)/$(app)
