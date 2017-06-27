@@ -1,3 +1,10 @@
 [target.thumbv7m-none-eabi]
 linker = "arm-none-eabi-gcc"
 ar = "arm-none-eabi-ar"
+
+runner = 'arm-none-eabi-gdb'
+rustflags = [
+  "-C", "linker=arm-none-eabi-ld",
+  "-C", "link-arg=-Tboot/linker.ld",
+  "-Z", "linker-flavor=ld",
+]

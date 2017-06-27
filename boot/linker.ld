@@ -6,16 +6,9 @@ MEMORY {
 __stack_start = ORIGIN(RAM) + LENGTH(RAM);
 __boot_checksum = 0 - (__stack_start + reset_handler + 1 + (abort + 1) * 5);
 
-__aeabi_unwind_cpp_pr0 = abort;
-__aeabi_unwind_cpp_pr1 = abort;
-
 __data_load = LOADADDR(.data);
 
 ENTRY(reset_handler)
-
-__aeabi_memclr4 = __aeabi_memclr;
-__aeabi_memcpy4 = __aeabi_memcpy;
-memcmp = __aeabi_memcmp;
 
 SECTIONS {
   .text : ALIGN(4) {

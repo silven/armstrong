@@ -1,23 +1,27 @@
 {
     "arch": "arm",
     "cpu": "cortex-m3",
-	"data-layout": "e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64",
-    "disable-redzone": true,
+    "data-layout": "e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64",
+    "env": "",
     "executables": true,
     "llvm-target": "thumbv7m-none-eabi",
-    "morestack": false,
+    "max-atomic-width": 32,
     "os": "none",
+    "panic-strategy": "abort",
     "relocation-model": "static",
     "target-endian": "little",
     "target-pointer-width": "32",
-    "no-compiler-rt": true,
-    "pre-link-args": [
-        "-Tboot/linker.ld",
-        "-mcpu=cortex-m3",
-		"-mthumb",
-        "-Wl,--gc-sections"
-    ],
-    "post-link-args": [
-        "-lgcc"
-    ]
+
+    "pre-link-args": {
+        "gcc": [
+            "-Tboot/linker.ld",
+            "-mcpu=cortex-m3",
+            "-mthumb",
+            "-Wl,--gc-sections",
+            "-lgcc"
+        ]
+    },
+    "post-link-args": {
+        "gcc": ["-lgcc"]
+    }
 }

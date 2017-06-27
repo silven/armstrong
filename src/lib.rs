@@ -2,11 +2,11 @@
 //!
 //!
 
-#![feature(lang_items, const_fn, naked_functions)]
-#![feature(drop_types_in_const)]
+#![feature(core_intrinsics, lang_items, const_fn, naked_functions)]
+#![feature(drop_types_in_const, compiler_builtins_lib)]
 
 #![warn(missing_docs)]
-#![deny(unused_extern_crates)]
+//#![deny(unused_extern_crates)]
 #![warn(unused_qualifications)]
 
 #![deny(unused_results)]
@@ -16,6 +16,9 @@
 
 #[cfg(not(target_os="none"))]
 extern crate core;
+
+#[cfg(target_os="none")]
+extern crate compiler_builtins;
 
 #[cfg(target_os="none")]
 mod lang_items;
@@ -29,6 +32,7 @@ pub mod utils;
 pub use utils::Volatile;
 
 mod regs;
+
 pub use regs::BasicRegister;
 
 #[macro_export]

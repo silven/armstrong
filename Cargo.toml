@@ -12,5 +12,5 @@ lto = true
 panic = 'abort'
 
 [target.thumbv7m-none-eabi.dependencies]
-#rust-libcore = "0.0.3"
-cortex-m = "0.2.11"
+cortex-m = "^0.2"
+cortex-m-rt = "^0.2"
